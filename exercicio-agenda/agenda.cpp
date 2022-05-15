@@ -41,7 +41,7 @@ void carrega(struct agenda agenda[], int &tl)
 
 void exibe(struct agenda agenda[20], int tl)
 {
-  printf("tamanho: %d", tl);
+  printf("\n==== LISTAR ====");
   int i;
   for (i = 0; i < tl; i++)
   {
@@ -68,7 +68,12 @@ void buscar(struct agenda agenda[20], int tl, char nome[10])
 
 void incluir(struct agenda agenda[20], int &tl)
 {
-  printf("INCLUIR\n");
+  if (tl >= 20)
+  {
+    printf("\n Agenda cheia.");
+    return;
+  }
+  printf("\n ==== INCLUIR ====");
   char nome[20];
   char telefone[20];
   printf("\nDigite seu nome: ");
@@ -78,6 +83,7 @@ void incluir(struct agenda agenda[20], int &tl)
   strcpy(agenda[tl].nome, nome);
   strcpy(agenda[tl].celular, telefone);
   tl++;
+  printf("\n Inserido com sucesso.");
 }
 
 void regravar(struct agenda agenda[], int tl)
@@ -133,15 +139,15 @@ void remover(struct agenda agenda[20], int &tl, char nome[])
 int main()
 {
   int tl = 0;
-  struct agenda agenda[20];
+  struct agenda contato[20];
   char opcao = 'a';
   int posicao = -1;
   char elem[20];
   char nome[20];
-  carrega(agenda, tl);
+  carrega(contato, tl);
   while (strcmp(&opcao, "s") != 0)
   {
-    printf("\n====== AGENDA ======");
+    printf("\n\n ====== AGENDA ======");
     printf("\nDigite a opcao desejada");
     printf("\n(I)ncluir");
     printf("\n(E)xcluir");
@@ -154,33 +160,31 @@ int main()
     switch (opcao)
     {
     case 'i':
-      incluir(agenda, tl);
-      printf("\n Usuario incluido \n\n");
+      incluir(contato, tl);
       break;
     case 'e':
       printf("Digite nome a ser removido: ");
       scanf("%s", nome);
-      remover(agenda, tl, nome);
+      remover(contato, tl, nome);
       break;
     case 'b':
       printf("Digite nome do usuario: ");
       scanf("%s", nome);
-      posicao = buscaExaustiva(agenda, tl, nome);
+      posicao = buscaExaustiva(contato, tl, nome);
       if (posicao == -1)
       {
         printf("Usuario nao existe\n");
       }
       else
       {
-        printf("Usuario contem na lista na posicao: %d", posicao);
+        printf("Usuario contem na lista, na posicao: %d", posicao);
       }
       break;
     case 'l':
-      printf("\n Listar:\n ");
-      exibe(agenda, tl);
+      exibe(contato, tl);
       break;
     case 'r':
-      regravar(agenda, tl);
+      regravar(contato, tl);
       break;
     default:
       printf("invalido\n");
