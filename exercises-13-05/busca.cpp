@@ -88,7 +88,7 @@ void InsercaoDireta(int vetor[TF]){
   }  
 }
 void InsercaoBinaria(int vetor[TF]){
-int aux, i, j, n, posi;
+  int aux, i, j, n, posi;
   if (vetor[0]>vetor[1])  {
     aux=vetor[0];
     vetor[0]=vetor[1];
@@ -171,6 +171,7 @@ int binariaRecursiva(int vetor[], int elem, int inicio, int fim)
       binariaRecursiva(vetor, elem, meio + 1, fim);
   }
 }
+
 main()
 {
   int tl = 0;
@@ -186,8 +187,8 @@ main()
     printf("\n2 - Exibe o vetor gerado");
     printf("\n3 - ORDENA BOLHA - Ordena o vetor");
     printf("\n4 - ORDENA SELECAO - Ordena o vetor");
-    printf("\n5 - ");
-    printf("\n6 - ");
+    printf("\n5 - Insercao Direta");
+    printf("\n6 - Insercao Binaria");
     printf("\n7 - Busca Exaustiva de um elemento no vetor desordenado");
     printf("\n8 - Busca Sequencial num vetor Ordenado");
     printf("\n9 - Busca Binaria num vetor Ordenado");
@@ -245,7 +246,7 @@ main()
       if (ordenado)
       {
         tempoi = time(NULL);
-        posicao = buscaSequencial(vetor, elem);
+        posicao = buscaSequencial(vetor, TF, elem);
         tempof = time(NULL);
         diferenca = difftime(tempof, tempoi);
         if (posicao != -1)
@@ -262,7 +263,7 @@ main()
       if (ordenado)
       {
         // obter o tempo inicial
-        posicao = buscaBinaria(vetor, elem);
+        posicao = buscaBinaria(vetor, TF, elem);
         // obter o tempo final
         // calcular a diferenca
         if (vetor[posicao] != elem)
