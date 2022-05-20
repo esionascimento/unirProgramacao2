@@ -19,6 +19,7 @@ void exibe(int vetor[TF])
     printf("\n vetor[%2d]=%3d", i, vetor[i]);
   getchar();
 }
+// ORDENACAO
 void Bolha(int vetor[TF])
 {
   int i;
@@ -38,45 +39,122 @@ void Bolha(int vetor[TF])
     tam = tam - 1;
   }
 }
-int buscaExaustiva(int vetor[TF], int elem)
-{ // vetor DESORdenado
-  int i = 0;
-  while ((vetor[i] != elem) && (i < TF))
-    i = i + 1;
-  if ((i < TF) && (vetor[i] == elem))
-    return i; // achou na posição i
-  else
-    return -1; // não achou
+void ordenaSelecao(int vetor[TF]) {
+  int i, j, menor, posmenor;
+    for(i=0;i<TF -1;i++) {
+    menor=vetor[i];
+    posmenor=i;
+    for(j=i+1;j<TF;j++)
+    if(vetor[j]<menor)
+    {
+      menor=vetor[j];
+      posmenor=j;
+    }
+      vetor[posmenor]=vetor[i];
+      vetor[i]=menor;
+    }
 }
-int buscaSequencial(int vetor[TF], int elem)
-{ // obrigatorio o vetor estar ORDENADO
-  int i = 0;
-  while ((elem > vetor[i]) && (i < TF))
-    i = i + 1;
-  if ((i < TF) && (elem == vetor[i]))
-    return i; // achou na posição i
-  else
-    return -1; // não achou
+void descrecente(int vetor[TF]) {
+  int i, j, menor, posmenor;
+    for(i=0;i<TF -1;i++) {
+    menor=vetor[i];
+    posmenor=i;
+    for(j=i+1;j<TF;j++)
+    if(vetor[j]>menor)
+    {
+      menor=vetor[j];
+      posmenor=j;
+    }
+      vetor[posmenor]=vetor[i];
+      vetor[i]=menor;
+    }
 }
-int buscaBinaria(int vetor[TF], int elem)
-{ // obrigatorio o vetor estar ORDENADO
-  int inicio, meio, fim;
-  inicio = 0;
-  fim = TF - 1;
-  meio = (inicio + fim) / 2;
-  while ((elem != vetor[meio]) && (inicio < fim))
-  {
-    if (elem > vetor[meio])
-      inicio = meio + 1;
-    else
-      fim = meio;
-    meio = (inicio + fim) / 2;
+// INSERCAO
+void InsercaoDireta(int vetor[TF]){
+  int aux, i, j, n, posi;
+  if (vetor[0]>vetor[1])  {
+    aux=vetor[0];
+    vetor[0]=vetor[1];
+    vetor[1]=aux;
   }
-  if (elem > vetor[meio])
-    return (meio + 1);
-  else
-    return (meio);
+  for (n=2;n<TF;n++)  {
+    aux=vetor[n];
+    //aux é o elemento a ser reinserido de forma ordenada
+    // n-1 é o tamanho do vetor que já está ordenado
+    posi=buscaSequencial(vetor,n,aux);
+    for(j=n ;j>posi ;j--)
+      vetor[j]=vetor[j-1];
+    vetor[posi]=aux;
+  }  
 }
+void InsercaoBinaria(int vetor[TF]){
+int aux, i, j, n, posi;
+  if (vetor[0]>vetor[1])  {
+    aux=vetor[0];
+    vetor[0]=vetor[1];
+    vetor[1]=aux;
+  }
+  for (n=2;n<TF;n++)  {
+    aux=vetor[n];
+    //aux é o elemento a ser reinserido de forma ordenada
+    // n-1 é o tamanho do vetor que já está ordenado
+    posi=buscaBinaria(vetor,n,aux);
+    for(j=n ;j>posi ;j--)
+      vetor[j]=vetor[j-1];
+    vetor[posi]=aux;
+  }  	
+}
+
+// BUSCAS
+
+int buscaSequencial(int vetor[TF], int tl, int elem)   { // obrigatorio o vetor estar ORDENADO
+  int i=0;
+  while ((elem > vetor[i])&&(i<tl))
+    i=i+1;
+  
+  return i; // achou na posição i OU encontrou a posicao ideal para inserir
+}
+int buscaBinaria(int vetor[TF],int tl, int elem)    { // obrigatorio o vetor estar ORDENADO
+  int inicio, meio, fim;
+  inicio=0;
+  fim=tl-1;
+  meio=(inicio+fim)/2;
+  while((elem!=vetor[meio])&&(inicio<fim)) {
+    if(elem>vetor[meio])
+      inicio=meio+1;
+    else
+      fim=meio;
+    meio=(inicio+fim)/2;
+  }
+  if (elem>vetor[meio])
+    return(meio+1);
+  else
+    return(meio);
+}
+
+int buscaExaustiva (int vetor[TF], int elem)   { // vetor DESORdenado
+  int i=0;
+  while ((vetor[i] != elem)&&(i<TF))
+    i=i+1;
+  if ((i < TF) && (vetor[i] == elem)) 
+    return i;           // achou na posição i 
+  else return  -1; // não achou
+}
+
+int binariaRecursiva(int vetor[], int elem, int inicio, int fim) {
+int meio;
+  if (inicio > fim)
+    return -1; //nao achou
+  else {
+    meio = (inicio+fim) / 2;
+    if (elem == vetor[meio])
+      return meio;
+    else if (elem < vetor[meio])
+      binariaRecursiva(vetor,elem,inicio ,meio-1);
+    else binariaRecursiva (vetor,elem,meio+1,fim);
+  }
+}
+
 int binariaRecursiva(int vetor[], int elem, int inicio, int fim)
 {
   int meio;
@@ -102,16 +180,20 @@ main()
   time_t tempoi, tempof;
   float diferenca;
 
-  while (opcao != 8)
+  while (opcao != 12)
   {
     printf("\n1 - Cria o vetor de %d elementos", TF);
     printf("\n2 - Exibe o vetor gerado");
-    printf("\n3 - BOLHA - Ordena o vetor");
-    printf("\n4 - Busca Exaustiva de um elemento no vetor desordenado");
-    printf("\n5 - Busca Sequencial num vetor Ordenado");
-    printf("\n6 - Busca Binaria num vetor Ordenado");
-    printf("\n7 - Busca Binaria Recursiva num vetor Ordenado");
-    printf("\n8 - Sair");
+    printf("\n3 - ORDENA BOLHA - Ordena o vetor");
+    printf("\n4 - ORDENA SELECAO - Ordena o vetor");
+    printf("\n5 - ");
+    printf("\n6 - ");
+    printf("\n7 - Busca Exaustiva de um elemento no vetor desordenado");
+    printf("\n8 - Busca Sequencial num vetor Ordenado");
+    printf("\n9 - Busca Binaria num vetor Ordenado");
+    printf("\n10 - Busca Binaria Recursiva num vetor Ordenado");
+    printf("\n11 - Decrescente selecao");
+    printf("\n12 - Sair");
     printf("\nEntre com a opcao: ");
     scanf("%d", &opcao);
     switch (opcao)
@@ -130,10 +212,22 @@ main()
       Bolha(vetor);
       tempof = time(NULL);
       diferenca = difftime(tempof, tempoi);
-      printf("\n ordenou vetor e demorou %f num vetor de %d elementos", diferenca, TF);
+      printf("\n BOLHA - ordenou vetor e demorou %f num vetor de %d elementos", diferenca, TF);
       ordenado = true;
       break;
     case 4:
+      tempoi = time(NULL); // obtem o tempo inicial para cronometrar
+      ordenaSelecao(vetor);
+      tempof = time(NULL);
+      diferenca = difftime(tempof, tempoi);
+      printf("\n SELECAO - ordenou vetor e demorou %f num vetor de %d elementos", diferenca, TF);
+      ordenado = true;
+      break;
+    case 5:
+      break;
+    case 6:
+      break;
+    case 7:
       printf("\n Exaustiva. Entre com o valor a ser procurado: ");
       scanf("%d", &elem);
       // tempoi
@@ -145,7 +239,7 @@ main()
       else
         printf("\n Demorou %f no vetor de %d elementos e encontrou na posicao vetor[%d]=%d", diferenca, TF, posicao, vetor[posicao]);
       break;
-    case 5:
+    case 8:
       printf("\n SEQUENCIAL exige vetor ORDENADO!!! \n Entre com o valor a ser procurado: ");
       scanf("%d", &elem);
       if (ordenado)
@@ -162,7 +256,7 @@ main()
       else
         printf("Vetor NAO esta ordenado \n\n");
       break;
-    case 6:
+    case 9:
       printf("\n BINARIA exige vetor ORDENADO!!! \n Entre com o valor a sere procurado: ");
       scanf("%d", &elem);
       if (ordenado)
@@ -179,7 +273,7 @@ main()
       else
         printf("Vetor NAO esta ordenado \n\n");
       break;
-    case 7:
+    case 10:
       printf("\n BINARIA RECURSIVA exige vetor ORDENADO");
       scanf("%d", &elem);
       if (ordenado)
@@ -195,6 +289,14 @@ main()
       }
       else
         printf("Vetor NAO esta ordenado \n\n");
+      break;
+    case 11:
+      tempoi = time(NULL); // obtem o tempo inicial para cronometrar
+      descrecente(vetor);
+      tempof = time(NULL);
+      diferenca = difftime(tempof, tempoi);
+      printf("\n DESCRECENTE SELECAO - ordenou vetor e demorou %f num vetor de %d elementos", diferenca, TF);
+      ordenado = true;
       break;
     } // switch
   }   // while
