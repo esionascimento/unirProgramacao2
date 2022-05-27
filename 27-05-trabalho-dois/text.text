@@ -1,0 +1,13 @@
+TRABALHO 2
+Quick Sort criado por C.A.R. H
+No nosso exemplo, usamos o pivô.
+O vetor é varrido da esquerda p/ direita até ser encontrado 1 elemento maior que o pivô (I para).
+Em seguida, o vetor é varrido da direita p/ a esquerda (J) até ser encontrado 1 elemento menor que o pivô. Daí ocorre 1 permuta.
+
+TRABALHO: existe o método Quick em que o pivô não é utilizado. Para i=0 e j=TF-1, começa-se diminuindo o j quando o elemento da posicao j for menor que o elemento da posicao i, permuta-se os elementos (ie j) e pass a aumentar o i.
+Quando o elemento da posição j for menor que o elemento i, permuta-se os elementos e passa a diminuir j e assim pocessivamente até que i seja igual a j.
+Quando i for igual a j, o elemento que está nesta posição já se encontra na posição ideal.
+Separamos as partes e continua até que todas as partes tenham somente 1 elemento, e assim o vetor está ordenado.
+
+provasliliane285@gmail.com
+
