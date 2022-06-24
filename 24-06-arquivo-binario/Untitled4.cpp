@@ -14,38 +14,71 @@ struct conta{
 };
 
 //===============================================================
-conta leCliente() { // leitura de um único cliente
- conta Cliente;
- printf("\nEntre com numero da conta:");
- scanf("%d",&Cliente.num_conta);
- printf("\nEntre com tipo da conta (E/C):");
- Cliente.tipo_conta=toupper(getche());
- printf("\nEntre com nome:");
- gets(Cliente.nome);gets(Cliente.nome);
- printf("\nEntre com limite:");
- scanf("%f",&Cliente.limite);
- printf("\nEntre com saldo:");
- scanf("%f",&Cliente.saldo);
- return (Cliente);
+conta leCliente() { // leitura de um unico cliente
+	conta Cliente;
+	char tipo;
+	printf("\nEntre com numero da conta: ");
+	scanf("%d",&Cliente.num_conta);
+	do {
+		printf("\nEntre com tipo da conta (E/C): ");
+		tipo = toupper(getche());
+ 		if (tipo == 'E' || tipo == 'C') {
+			Cliente.tipo_conta = tipo;
+			break;
+		} else {
+			printf("\nOpcao invalido, tente novamente...\n");
+		}
+ 	} while (tipo != 'E' || tipo != 'C');
+	printf("\nEntre com nome: ");
+	gets(Cliente.nome);gets(Cliente.nome);
+	printf("\nEntre com limite: ");
+	scanf("%f",&Cliente.limite);
+	printf("\nEntre com saldo: ");
+	scanf("%f",&Cliente.saldo);
+	return (Cliente);
 }
 
-void exibe(conta Cliente) { // exibe um único cliente
- printf("\n---------------------\n");
- printf("Conta: %d\n",Cliente.num_conta);
- if (Cliente.tipo_conta=='E')
- printf("Tipo: Especial \n");
- else printf("Tipo: Comum \n");
- printf("Nome: %s \n",Cliente.nome);
- printf("Limite: %.2f\n",Cliente.limite);
- printf("Saldo: %.2f\n",Cliente.saldo);
- printf("-----------------------\n");
+void exibe(conta Cliente) { // exibe um unico cliente
+	printf("\n---------------------\n");
+	printf("Conta: %d\n",Cliente.num_conta);
+	if (Cliente.tipo_conta=='E')
+		printf("Tipo: Especial \n");
+	else printf("Tipo: Comum \n");
+		printf("Nome: %s \n",Cliente.nome);
+	printf("Limite: %.2f\n",Cliente.limite);
+	printf("Saldo: %.2f\n",Cliente.saldo);
+	printf("-----------------------\n");
 }
+
+// void exibePorTipo(conta Cliente, char tipo) {
+// 	printf("\n---------------------\n");
+// 	printf("Conta: %d\n",Cliente.num_conta);
+// 	if (Cliente.tipo_conta == 'E')
+// 		printf("Tipo: Especial \n");
+// 	else printf("Tipo: Comum \n");
+// 		printf("Nome: %s \n",Cliente.nome);
+// 	printf("Limite: %.2f\n",Cliente.limite);
+// 	printf("Saldo: %.2f\n",Cliente.saldo);
+// 	printf("-----------------------\n");
+// 	FILE *arqNovo;
+// 	arqNovo = fopen("Clientes.bin","rb"); // leitura dos clientes cadastrados
+// 		fread(&Cliente, sizeof(conta), 1, arqNovo);
+// 		// feof retorna diferente de zero se fim
+// 		// feof retorna zero se nao for detectado fim
+// 		while (!feof(arqNovo))
+// 		{
+// 			//exibe o registro lido
+// 			exibe(Cliente);
+// 			fread(&Cliente, sizeof(conta), 1, arqNovo);
+// 		}
+// 	fclose (arqNovo);
+// }
 
 void lerSalvar() {
 	conta Cliente;
 	char opcao='S';//deseja continuar
 	FILE *arqNovo; // ponteiro para a estrutura predefinida FILE
-	 arqNovo = fopen("Clientes.bin","wb");//arquivo novo p/gravação apenas
+	 arqNovo = fopen("Clientes.bin","wb");//arquivo novo p/gravaï¿½ï¿½o apenas
 	 while (opcao=='S')
 	 {
 		 Cliente = leCliente();
@@ -58,25 +91,43 @@ void lerSalvar() {
 	 fclose(arqNovo);
 }
 
-void exibeCadastrados(conta Cliente) {
+void exibeCadastrados(conta Cliente, char tipo) {
 	FILE *arqNovo;
 	arqNovo = fopen("Clientes.bin","rb"); // leitura dos clientes cadastrados
-	 fread(&Cliente, sizeof(conta), 1, arqNovo);
-	 // feof retorna diferente de zero se fim
-	 // feof retorna zero se não for detectado fim
-	 while (!feof(arqNovo))
-	 {
-	 //exibe o registro lido
-	 exibe(Cliente);
-	 fread(&Cliente, sizeof(conta), 1, arqNovo);
-	 }
-	 fclose (arqNovo); 
+	fread(&Cliente, sizeof(conta), 1, arqNovo);
+	// feof retorna diferente de zero se fim
+	// feof retorna zero se nao for detectado fim
+	if (tipo == 'T') {
+		while (!feof(arqNovo))
+		{
+			//exibe o registro lido
+			exibe(Cliente);
+			fread(&Cliente, sizeof(conta), 1, arqNovo);
+		}
+	} else if (tipo == 'E') {
+		while (!feof(arqNovo))
+		{
+			if (Cliente.tipo_conta=='E') {
+				exibe(Cliente);
+			}
+			fread(&Cliente, sizeof(conta), 1, arqNovo);
+		}
+	} else {
+		while (!feof(arqNovo))
+		{
+			if (Cliente.tipo_conta != 'E') {
+				exibe(Cliente);
+			}
+			fread(&Cliente, sizeof(conta), 1, arqNovo);
+		}
+	}
+	fclose (arqNovo); 
 }
 
 void buscarCliente() {
 	conta Cliente;
 	 FILE *arqNovo; // ponteiro para a estrutura predefinida FILE
-	 arqNovo = fopen("Clientes.bin","r+b");//abre ja existente leitura/gravaçao
+	 arqNovo = fopen("Clientes.bin","r+b");//abre ja existente leitura/gravaï¿½ao
 	 if (arqNovo!= NULL) { // verifica se o arquivo existe e foi localizado
 	 // exibe todos os registros do arquivo
 	 fread(&Cliente, sizeof(conta), 1, arqNovo);
@@ -116,14 +167,14 @@ main(){
  
  int op = 0;
  do {
- 	printf("\n=== FAÇA UM MENU NO PROGRAMA PRINCIPAL CONTENDO:  ===");
+ 	printf("\n=== FACA UM MENU NO PROGRAMA PRINCIPAL CONTENDO:  ===");
  	printf("\n1 - Ler um cliente e grava-lo no arquivo");
  	printf("\n2 - Exibir os clientes cadastrados");
  	printf("\n3 - Buscar cliente ao fornecer o numero da conta");
  	printf("\n4 - Exibir os clientes com conta comum");
  	printf("\n5 - Exibir os clientes com conta especial");
- 	printf("\n6 - Fazer retirada para um determinado cliente ao fornecer o número da conta");
- 	printf("\n7 – Fazer depósito para um determinado cliente ao fornecer o número da conta ");
+ 	printf("\n6 - Fazer retirada para um determinado cliente ao fornecer o numero da conta");
+ 	printf("\n7 - Fazer deposito para um determinado cliente ao fornecer o numero da conta ");
  	printf("\n8 - Totalizar todos os saldos das contas exibindo para cada cliente o nro.conta, o nome cliente e o saldo");
  	printf("\n9 - Sair");
  	printf("\nOpcao desejada: ");
@@ -134,11 +185,17 @@ main(){
  			lerSalvar();
  			break;
  		case 2:
- 			exibeCadastrados(Cliente);
+ 			exibeCadastrados(Cliente, 'T');
  			break;
  		case 3:
  			buscarCliente();
  			break;
+		case 4:
+			exibeCadastrados(Cliente, 'C');
+			break;
+		case 5:
+			exibeCadastrados(Cliente, 'E');
+			break;
  		default:
  			printf("\nOpcao invalido...\n");
  			break;
@@ -148,10 +205,6 @@ main(){
  
  system("PAUSE");
 } 
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
 
 
